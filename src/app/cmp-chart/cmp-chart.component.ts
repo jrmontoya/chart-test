@@ -126,7 +126,7 @@ export class CmpChartComponent implements OnInit {
                     
                     var invertBehavior = [false, true, true, false, false];
                     // Format Colors 
-                    if(invertBehavior[currIndex]){
+                    if(!invertBehavior[currIndex]){
                         if(value >= prevData){
                             context.dataset.backgroundColor[currIndex]  = '#32D574';
                             context.dataset.hoverBackgroundColor[currIndex]  = '#32D574';
