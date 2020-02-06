@@ -3,5 +3,34 @@
     max-width: 50vw;
     max-height: 50vw;
     
+    position: relative;
     
+    .chart-toolbar{
+        
+        position: absolute;
+        top: 2px;
+        left: 50px;
+        z-index: 9;
+        
+        font-size: 12px;
+        color: #878F96;
+        
+        select{
+            appearance: none;
+            background-color: #F3F7FA;
+            border-radius: 15px;
+            font-size: 11px;
+            color: #878F96;
+            padding: 5px 30px 5px 10px;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            
+            background-image: url('data:image/svg+xml,%3Csvg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="306px" height="306px" viewBox="0 0 306 306" style="enable-background:new 0 0 306 306;" xml:space="preserve"%3E%3Cg%3E%3Cg id="expand-more"%3E%3Cpolygon points="270.3,58.65 153,175.95 35.7,58.65 0,94.35 153,247.35 306,94.35 "/%3E%3C/g%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3C/svg%3E');
+            background-position: calc(100% - 10px) center;
+            background-repeat: no-repeat;
+            background-size: 8px 8px;
+        }
+    }
 }

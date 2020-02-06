@@ -1,8 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
-import { Label } from 'ng2-charts';
+import { BaseChartDirective, Label } from 'ng2-charts';
 
 @Component({
   selector: 'app-cmp-chart',
@@ -12,49 +12,95 @@ import { Label } from 'ng2-charts';
 export class CmpChartComponent implements OnInit {
 
     @Input('source') sourceData: string;
+    @ViewChild(BaseChartDirective, {static: false}) _chart: BaseChartDirective;
     
+    public graphType = [
+        {
+            key: 'Log',
+            value: 'logarithmic'
+        }, 
+        {
+            key: 'Linear',
+            value: 'linear'
+        }];
+    
+    public onChange(newValue) {
+        this._chart.chart.config.options.scales.yAxes[0].type = newValue;
+        this._chart.chart.update();
+    }
     
       public barChartOptions: ChartOptions = {
         responsive: true,
-        plugins: {},
         tooltips:{ enabled: false },
+        layout: {
+            padding: {
+                left: 0,
+                right: 0,
+                top: 30,
+                bottom: 0
+            }
+        },
+          
         scales: { 
-                xAxes: [{
-                  gridLines: {
-                    display: false,
-                  },
-                  ticks: {
+            xAxes: [{
+                gridLines: {
+                    drawOnChartArea: false,
+                    display: true,
+                    drawBorder: true,
+                    color: '#EBF0F4',
+                    zeroLineColor: 'transparent'
+                    
+                },
+                ticks: {
                     fontColor: '#333A49',
                     fontStyle: 'bold',
-                  }
-                }], 
-                yAxes: [{
-                   gridLines: {
-                       zeroLineWidth: 0,
-                       zeroLineColor: 'rbga(0,0,0,0)'
-                    },
-                   ticks: {
-                      fontColor: '#333A49',
-                      fontStyle: 'bold',
-                      callback: function(value) {
-                         var ranges = [
-                            { divider: 1e6, suffix: 'M' },
-                            { divider: 1e3, suffix: 'k' }
-                         ];
-                         function formatNumber(n) {
-                            for (var i = 0; i < ranges.length; i++) {
-                               if (n >= ranges[i].divider) {
-                                  return (n / ranges[i].divider).toString() + ranges[i].suffix;
-                               }
+                    beginAtZero: true
+                },
+            }], 
+            yAxes: [{
+                type: 'logarithmic',
+                gridLines: {
+                    drawBorder: false,
+                    color: '#EBF0F4',
+                    zeroLineColor: '#EBF0F4'
+                },
+                ticks: {
+                    fontColor: '#333A49',
+                    fontStyle: 'bold',
+                    maxTicksLimit: 5,
+                    beginAtZero: true,
+                    suggestedMin: 0,
+                    mirror:false,
+                    callback: function(value) {
+                        if(value >= 1){
+                            var ranges = [{ divider: 1e3, suffix: 'k' }];
+                            function formatNumber(n) {
+                                for (var i = 0; i < ranges.length; i++) {
+                                    if (n >= ranges[i].divider) {
+                                        return (n / ranges[i].divider).toString();
+                                    }
+                                }
+                                return n;
                             }
-                            return n;
-                         }
-                         return formatNumber(value);
-                      },
-
-                   }
-
-                }]
+                            return formatNumber(value);
+                        }
+                        else{
+                            return value;
+                        }
+                    },
+                }
+            }]
+        },
+        animation: {
+          duration: 0,
+          onComplete: function(context) {
+            var controller = context.chart.controller;
+            var chart = controller.chart;
+            var yAxis = controller.scales['y-axis-0'];
+            var xOffset = chart.width - (chart.width - 20);
+            var yOffset = chart.height - (chart.height - 15);
+            context.chart.ctx.fillText('(K)', xOffset, yOffset);
+          }
         }
         
       };
@@ -74,7 +120,7 @@ export class CmpChartComponent implements OnInit {
             backgroundColor: '#EBF0F4', 
             hoverBackgroundColor: '#EBF0F4', 
             barPercentage: 0.4,
-            data: [80000, 81000, 85000, 100000, 130000],
+            data: [80000, 81000, 80000, 112000, 1150000],
             datalabels: {
                 labels: {
                     title: null
@@ -86,7 +132,7 @@ export class CmpChartComponent implements OnInit {
             backgroundColor: this.barColors,
             hoverBackgroundColor: this.barColors,
             barPercentage: 1.2,
-            data: [100000, 90000, 76000, 120000, 125000],
+            data: [100000, 90000, 76000, 120000, 1000000],
             datalabels: {
                 anchor: 'end',
                 align: 'bottom',
@@ -117,9 +163,6 @@ export class CmpChartComponent implements OnInit {
                     }
                 },
                 formatter: function(value, context) {
-                    
-                    console.log(context);
-                    
                     
                     var currIndex = context.dataIndex;
                     var prevData = context.chart.data.datasets[0].data[currIndex];

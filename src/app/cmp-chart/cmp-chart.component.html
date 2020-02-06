@@ -1,12 +1,23 @@
 
 
 <div class="chart-wrapper">
-<canvas baseChart
+    
+    <div class="chart-toolbar">
+    
+        Operations 
+        
+        <select (change)="onChange($event.target.value)">
+            <option [value]="o.value" *ngFor="let o of graphType">{{o.key}}</option>
+        </select>
+        
+    </div>
+    
+    <canvas baseChart
         [datasets]="barChartData"
         [labels]="barChartLabels"
         [options]="barChartOptions"
         [plugins]="barChartPlugins"
         [legend]="barChartLegend"
         [chartType]="barChartType">
-      </canvas>
+    </canvas>
 </div>
