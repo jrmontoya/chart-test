@@ -1,6 +1,10 @@
 <div class="wrapper">
 
-    <h1>Dev Chart Assignment</h1>
-
-    <app-cmp-chart source=""></app-cmp-chart>
+    <app-cmp-chart
+        [source]="customChartData">
+    </app-cmp-chart>
+    
+    
+    <button (click)="randomizeData()">Random Values</button>
+    
 </div>
